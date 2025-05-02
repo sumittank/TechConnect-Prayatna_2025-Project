@@ -81,6 +81,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const multer = require("multer");
 const path = require("path");
+const MongoStore = require('connect-mongo');
 
 const dashboardRoutes = require("./routes/dashboard");
 const usersRoutes = require("./routes/users");
@@ -109,8 +110,12 @@ app.use(session({
     secret: process.env.SESSION_SECRET || 'defaultsecret',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }
-}));
+    cookie: { secure: false },
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI, // Your MongoDB connection string
+      ttl: 24 * 60 * 60 // 1 day
+    })
+  }));
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("✅ MongoDB Connected"))
