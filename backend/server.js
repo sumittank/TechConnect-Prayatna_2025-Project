@@ -98,10 +98,13 @@ dotenv.config();
 
 const app = express();
 
+https://fire-dept.netlify.app/login
+
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true, 
-}));
+    origin: ['https://fire-dept.netlify.app'], // Your Netlify frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+  }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
