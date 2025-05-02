@@ -106,16 +106,18 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const redis = require('redis');
+
+const redisClient = redis.createClient({ url: process.env.REDIS_URL });
+
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'defaultsecret',
+    store: new RedisStore({ client: redisClient }),
+    secret: 'your-session-secret',
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URI, // Your MongoDB connection string
-      ttl: 24 * 60 * 60 // 1 day
-    })
-  }));
+    saveUninitialized: false,
+}));
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("✅ MongoDB Connected"))
