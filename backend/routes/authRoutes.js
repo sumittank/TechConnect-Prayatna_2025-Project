@@ -12,12 +12,12 @@ const SECRET_KEY = process.env.SECRET_KEY;
 
 
 router.use(cookieParser());
-router.use(session({
-    secret: SECRET_KEY,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false, httpOnly: true, maxAge: 3600000 } 
-}));
+// router.use(session({
+//     secret: SECRET_KEY,
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false, httpOnly: true, maxAge: 3600000 } 
+// }));
 
 
 const ADMIN_OFFICER_KEYS = {
@@ -81,7 +81,7 @@ router.post('/login', async (req, res) => {
 
         const token = jwt.sign({ id: user._id, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
 
-        req.session.user = { id: user._id, name: user.name, role: user.role };
+        // req.session.user = { id: user._id, name: user.name, role: user.role };
 
         res.cookie('token', token, { httpOnly: true, secure: false });
         res.json({ token, user: { name: user.name, email: user.email, role: user.role } });
@@ -93,10 +93,10 @@ router.post('/login', async (req, res) => {
 
 router.post('/logout', (req, res) => {
     res.clearCookie('token');
-    req.session.destroy((err) => {
-        if (err) return res.status(500).json({ message: 'Logout failed' });
-        res.json({ message: '✅ Logged out successfully!' });
-    });
+    // req.session.destroy((err) => {
+    //     if (err) return res.status(500).json({ message: 'Logout failed' });
+    //     res.json({ message: '✅ Logged out successfully!' });
+    // });
 });
 
 router.get('/protected-route', authMiddleware, (req, res) => {
