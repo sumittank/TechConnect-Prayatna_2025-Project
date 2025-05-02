@@ -106,7 +106,6 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
 
