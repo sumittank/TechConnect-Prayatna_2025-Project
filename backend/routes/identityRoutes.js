@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Identity = require("../models/Identity"); // Import the Identity model
+const Identity = require("../models/Identity");
 
 const router = express.Router();
 
@@ -17,11 +17,11 @@ router.post("/verify-identity", async (req, res) => {
             return res.status(400).json({ success: false, message: "❌ Aadhaar Number is required" });
         }
 
-        // Remove spaces and ensure it's a string
+       
         aadhaarNumber = aadhaarNumber.toString().trim();
         console.log("🔍 Searching Aadhaar:", aadhaarNumber, "Type:", typeof aadhaarNumber);
 
-        // Query database for Aadhaar
+        
         const record = await Identity.findOne({ aadhaarNumber: aadhaarNumber });
 
         console.log("📌 Query Result:", record);

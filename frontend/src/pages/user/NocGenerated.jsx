@@ -6,7 +6,7 @@ function NocGenerated() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const email = localStorage.getItem("email"); // Get email from localStorage
+    const email = localStorage.getItem("email");
 
     if (!email) {
       setError("User email not found in localStorage.");
@@ -14,8 +14,8 @@ function NocGenerated() {
       return;
     }
 
-    // ✅ Fetch NOC details for the logged-in user
-    fetch(`http://localhost:5000/api/noc/user/nocs?email=${email}`)
+
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/noc/user/nocs?email=${email}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.message) {

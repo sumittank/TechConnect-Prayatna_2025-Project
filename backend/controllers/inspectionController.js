@@ -1,7 +1,6 @@
 const Inspection = require("../models/Inspection");
 const Application = require("../models/Application");
 
-// ✅ Fetch all inspections where requiresInspection = true
 const getAllInspections = async (req, res) => {
   try {
     const inspections = await Inspection.find({ requiresInspection: true });
@@ -11,7 +10,7 @@ const getAllInspections = async (req, res) => {
   }
 };
 
-// ✅ Get inspection details by application ID
+
 const getInspectionById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -27,41 +26,6 @@ const getInspectionById = async (req, res) => {
   }
 };
 
-// ✅ Create or Update Inspection
-// const createOrUpdateInspection = async (req, res) => {
-//   try {
-//     const { applicationId, requiresInspection, reason, inspector, date, time } = req.body;
-
-//     if (!applicationId) {
-//       return res.status(400).json({ message: "Application ID is required" });
-//     }
-
-//     let inspection = await Inspection.findOne({ applicationId });
-
-//     if (inspection) {
-//       inspection.requiresInspection = requiresInspection;
-//       inspection.reason = reason;
-//       inspection.inspector = inspector;
-//       inspection.date = date;
-//       inspection.time = time;
-//       await inspection.save();
-//     } else {
-//       inspection = new Inspection({
-//         applicationId,
-//         requiresInspection,
-//         reason,
-//         inspector,
-//         date,
-//         time,
-//       });
-//       await inspection.save();
-//     }
-
-//     res.status(200).json({ message: "Inspection saved successfully", inspection });
-//   } catch (error) {
-//     res.status(500).json({ message: "Server Error" });
-//   }
-// };
 
 const createOrUpdateInspection = async (req, res) => {
     try {
@@ -74,16 +38,15 @@ const createOrUpdateInspection = async (req, res) => {
       let inspection = await Inspection.findOne({ applicationId });
   
       if (inspection) {
-        // ✅ Update existing record
+        //Update existing record
         inspection.requiresInspection = requiresInspection;
         inspection.reason = reason;
         inspection.inspector = inspector;
         inspection.date = date;
         inspection.time = time;
-        inspection.status = requiresInspection ? "pending" : "completed"; // ✅ Fix status based on checkbox
-        await inspection.save();
+        inspection.status = requiresInspection ? "pending" : "completed"; 
       } else {
-        // ✅ Create new record
+        // Create new record
         inspection = new Inspection({
           applicationId,
           requiresInspection,
@@ -91,7 +54,7 @@ const createOrUpdateInspection = async (req, res) => {
           inspector,
           date,
           time,
-          status: requiresInspection ? "pending" : "completed", // ✅ Fix status based on checkbox
+          status: requiresInspection ? "pending" : "completed",
         });
         await inspection.save();
       }
@@ -103,7 +66,7 @@ const createOrUpdateInspection = async (req, res) => {
   };
   
 
-// ✅ Update inspection status
+
 const updateInspectionStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -121,7 +84,7 @@ const updateInspectionStatus = async (req, res) => {
   }
 };
 
-// ✅ Mark inspection as finalized
+
 const finalizeInspectionStatus = async (req, res) => {
     try {
       const { id } = req.params;
@@ -142,7 +105,7 @@ const finalizeInspectionStatus = async (req, res) => {
   };
 
 
-// ✅ Fetch inspections for a specific user based on email
+
 const inspectionForParticularUser = async (req,res) => {
     try {
         const { email } = req.query;
@@ -151,20 +114,20 @@ const inspectionForParticularUser = async (req,res) => {
           return res.status(400).json({ message: "Email is required" });
         }
     
-        // 🔹 Step 1: Find applications linked to the email
+        
         const applications = await Application.find({ email });
     
         if (!applications.length) {
           return res.status(404).json({ message: "No applications found for this user." });
         }
     
-        // 🔹 Step 2: Extract all `_id` values from applications
+
         const applicationIds = applications.map(app => app._id);
     
-        // 🔹 Step 3: Find inspections where `applicationId` matches any of the `_id`s
+
         const inspections = await Inspection.find({ applicationId: { $in: applicationIds } });
     
-        // 🔹 Step 4: Return inspections (empty array if none found)
+
         res.status(200).json({ inspections });
     
       } catch (error) {

@@ -5,7 +5,7 @@ const Application = require("../models/Application");
 const Inspection = require("../models/Inspection");
 const Noc = require("../models/NOC");
 
-// ✅ Route to fetch dashboard statistics
+
 router.get("/stats", async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();

@@ -24,7 +24,7 @@ const Register = () => {
     setSuccess("");
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/register", formData);
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/register`, formData);
       setSuccess(response.data.message);
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {

@@ -15,7 +15,7 @@ const AadhaarVerification = () => {
 
         try {
             setVerificationResult("🔄 Verifying Aadhaar...");
-            const response = await axios.post("http://localhost:5000/api/verify-identity", { aadhaarNumber });
+            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/verify-identity`, { aadhaarNumber });
 
             if (response.data.success) {
                 setVerificationResult(`✅ Verified: ${response.data.data.name}, ${response.data.data.gender}`);

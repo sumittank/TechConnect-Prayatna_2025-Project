@@ -8,7 +8,6 @@ export const AuthProvider = ({ children }) => {
   const [userRole, setUserRole] = useState(localStorage.getItem("logintype"));
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("authToken"));
 
-  // Listen for changes in localStorage (useful for logout/login across tabs)
   useEffect(() => {
     const updateAuth = () => {
       setUserRole(localStorage.getItem("logintype"));

@@ -8,7 +8,7 @@ const SearchBar = ({ onSearch }) => {
     if (!query) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/search?q=${query}`);
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/search?q=${query}`);
       const data = await response.json();
       onSearch(data);
     } catch (error) {

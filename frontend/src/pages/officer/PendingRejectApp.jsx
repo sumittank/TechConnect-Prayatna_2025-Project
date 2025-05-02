@@ -1,53 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-
-// function PendingRejectApp() {
-//   const [applications, setApplications] = useState([]);
-
-//   useEffect(() => {
-//     const fetchApplications = async () => {
-//       try {
-//         const response = await axios.get("http://localhost:5000/api/all-applications");
-//         const filteredApplications = response.data.filter(
-//           (app) => app.status === "Pending" || app.status === "Rejected"
-//         );
-//         setApplications([...filteredApplications].reverse());
-//       } catch (error) {
-//         console.error("Error fetching applications", error);
-//       }
-//     };
-
-//     fetchApplications();
-//   }, []);
-
-//   return (
-//     <div className="p-6 max-w-4xl mx-auto bg-white rounded-lg shadow-md">
-//       <h2 className="text-2xl font-bold mb-4">Pending & Rejected Applications</h2>
-//       {applications.length === 0 ? (
-//         <p>No pending or rejected applications found.</p>
-//       ) : (
-//         <ul>
-//           {applications.map((app) => (
-//             <li key={app._id} className="border p-4 rounded mb-4">
-//               <p><strong>Application ID:</strong> {app._id}</p>
-//               <p><strong>Owner Name:</strong> {app.ownerName}</p>
-//               <p><strong>Status:</strong> {app.status}</p>
-//               <p><strong>Inspection Status:</strong> {app.inspectionStatus ? "Completed" : "Pending"}</p>
-//               <p><strong>Remark:</strong> {app.remark || "No remark provided"}</p>
-//             </li>
-//           ))}
-//         </ul>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default PendingRejectApp;
-
-
-
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -57,7 +7,7 @@ function PendingRejectApp() {
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/all-applications");
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/all-applications`);
         const filteredApplications = response.data.filter(
           (app) => app.status === "Pending" || app.status === "Rejected"
         );
@@ -70,7 +20,6 @@ function PendingRejectApp() {
     fetchApplications();
   }, []);
 
-  // ✅ Function to get status background color
   const getStatusClass = (status) => {
     switch (status) {
       case "Completed":

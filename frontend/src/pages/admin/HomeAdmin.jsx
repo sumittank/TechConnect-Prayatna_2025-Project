@@ -4,7 +4,7 @@ import SearchBar from "../../components/SearchBar";
 
 function HomeAdmin() {
   const [stats, setStats] = useState({ totalUsers: 0, totalApplications: 0, totalInspections: 0, totalNocs: 0 });
-  const [searchResults, setSearchResults] = useState([]); // Store search results
+  const [searchResults, setSearchResults] = useState([]); 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -13,7 +13,7 @@ function HomeAdmin() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/dashboard/stats");
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/dashboard/stats`);
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const data = await response.json();
@@ -30,9 +30,6 @@ function HomeAdmin() {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <div className="max-w-6xl mx-auto text-center bg-white rounded-lg shadow-lg p-6">
-        {/* <h1 className="mt-12  text-4xl font-extrabold text-center text-gray-900 border-b-4 border-red-500 inline-block">
-          həˈlō Officer  
-        </h1> */}
         <h1 className="mt-12 text-4xl font-extrabold text-center text-gray-900 border-b-4 border-red-500 inline-block mx-auto">
   həˈlō Admin  
 </h1>
@@ -55,20 +52,6 @@ function HomeAdmin() {
         <SearchBar onSearch={setSearchResults} />
 
         <span className="text-2xl font-bold text-center">Display Search Results</span>
-        {/* <div className="mt-6 bg-gray-50 p-4 rounded-lg shadow-md">
-          {searchResults.length > 0 ? (
-            <ul>
-              {searchResults.map((result, index) => (
-                <li key={index} className="border-b py-2">
-                  <span className="font-semibold">{result.type}:</span>{" "}
-                  {result.type === "User" ? `${result.name} (${result.email})` : `${result.ownerName} - ${result.businessName} (${result.email})`}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-center text-gray-500">No results found.</p>
-          )}
-        </div> */}
         {/* Display Search Results */}
 <div className="mt-6 bg-white p-6 rounded-lg shadow-lg border border-gray-200">
   {searchResults.length > 0 ? (
@@ -115,9 +98,6 @@ const DashboardCard = ({ title, count, bgColor, textColor, buttonColor, onClick 
     <div className={`${bgColor} p-6 rounded-lg shadow-md text-center hover:scale-105 transform transition duration-300`}> 
       <p className="text-lg font-semibold">{title}</p>
       <p className={`text-3xl font-bold ${textColor}`}>{count}</p>
-      {/* <button className={`mt-4 px-4 py-2 text-white rounded-lg shadow ${buttonColor}`} onClick={onClick}>
-        View
-      </button> */}
     </div>
   );
 };

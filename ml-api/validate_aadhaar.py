@@ -1,126 +1,3 @@
-
-
-
-
-
-# import sys
-# import cv2
-# import pytesseract
-# import re
-
-# # ✅ Set Tesseract path manually
-# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-
-# def extract_text(image_path):
-#     """Extract text from the uploaded Aadhaar image using OCR."""
-#     image = cv2.imread(image_path)
-    
-#     # Convert image to grayscale
-#     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    
-#     # Apply thresholding for better OCR accuracy
-#     processed_image = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-    
-#     # Extract text using Tesseract OCR
-#     extracted_text = pytesseract.image_to_string(processed_image)
-#     return extracted_text.strip()
-
-# def validate_aadhaar(text):
-#     """Validate if the extracted text contains a valid Aadhaar number."""
-#     aadhaar_pattern = r"\b\d{4}\s\d{4}\s\d{4}\b"
-#     match = re.search(aadhaar_pattern, text)
-    
-#     if match:
-#         return f"Valid Aadhaar Number Found: {match.group()}"
-#     else:
-#         return "Invalid Aadhaar Number"
-
-# if __name__ == "__main__":
-#     if len(sys.argv) != 2:
-#         print("Usage: python validate_aadhaar.py <image_path>")
-#         sys.exit(1)
-
-#     image_path = sys.argv[1]
-    
-#     # Extract text from image
-#     extracted_text = extract_text(image_path)
-    
-#     # Validate Aadhaar number
-#     validation_result = validate_aadhaar(extracted_text)
-    
-#     # Output the result (this will be sent to Node.js)
-#     print(validation_result)
-
-
-
-
-
-# import sys
-# import cv2
-# import pytesseract
-# import re
-
-# import sys
-# sys.stdout.reconfigure(encoding='utf-8')
-
-# # Set Tesseract path
-# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-
-# def extract_text(image_path):
-#     """Extract text from Aadhaar image using OCR."""
-#     image = cv2.imread(image_path)
-#     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-#     processed_image = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-#     extracted_text = pytesseract.image_to_string(processed_image)
-#     return extracted_text.strip()
-
-# def extract_details(text):
-#     """Extract Aadhaar details (Number, DOB, Gender) from OCR text."""
-#     aadhaar_pattern = r"\b\d{4}\s\d{4}\s\d{4}\b"
-#     dob_pattern = r"\b\d{2}/\d{2}/\d{4}\b"
-#     gender_pattern = r"\b(MALE|FEMALE|TRANSGENDER)\b"
-
-#     aadhaar_number = re.search(aadhaar_pattern, text)
-#     dob = re.search(dob_pattern, text)
-#     gender = re.search(gender_pattern, text, re.IGNORECASE)
-
-#     return {
-#         "aadhaar_number": aadhaar_number.group() if aadhaar_number else "❌ Not Found",
-#         "dob": dob.group() if dob else "❌ Not Found",
-#         "gender": gender.group().capitalize() if gender else "❌ Not Found"
-#     }
-
-# if __name__ == "__main__":
-#     if len(sys.argv) != 2:
-#         print("Usage: python validate_aadhaar.py <image_path>")
-#         sys.exit(1)
-
-#     image_path = sys.argv[1]
-    
-#     # Extract text from image
-#     extracted_text = extract_text(image_path)
-    
-#     # Extract Aadhaar details
-#     details = extract_details(extracted_text)
-    
-#     # Display formatted output
-#     print("\n✅ Aadhaar Verification Summary:")
-#     print("-----------------------------------")
-#     print(f"📌 Aadhaar Number: {details['aadhaar_number']}")
-#     print(f"📌 DOB: {details['dob']}")
-#     print(f"📌 Gender: {details['gender']}")
-
-#     # Check for missing elements that indicate a possible fake Aadhaar
-#     if "Unique Identification Authority of India" not in extracted_text:
-#         print("⚠ Possible Fake Aadhaar (Missing: Unique Identification Authority of India)")
-#     else:
-#         print("✅ ALL Corrected Information Valid Aadhaar Card")
-
-#     print("✅ Aadhaar Document Verification Completed.")
-
-
-
-
 import sys
 import cv2
 import pytesseract
@@ -129,11 +6,9 @@ import re
 import sys
 sys.stdout.reconfigure(encoding='utf-8')
 
-# Set Tesseract path
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-# ✅ Verhoeff Algorithm for Aadhaar Number Validation
-# Multiplication Table
+
 verhoeff_table_d = [
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     [1, 2, 3, 4, 0, 6, 7, 8, 9, 5],
@@ -147,7 +22,7 @@ verhoeff_table_d = [
     [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
 ]
 
-# Permutation Table
+
 verhoeff_table_p = [
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     [1, 5, 7, 6, 2, 8, 3, 0, 9, 4],
@@ -159,22 +34,22 @@ verhoeff_table_p = [
     [7, 0, 4, 6, 9, 1, 3, 2, 5, 8]
 ]
 
-# Inverse Table
+
 verhoeff_table_inv = [0, 4, 3, 2, 1, 5, 6, 7, 8, 9]
 
 def verhoeff_validate(aadhaar_number):
     """Validate Aadhaar number using Verhoeff Algorithm."""
-    aadhaar_number = aadhaar_number.replace(" ", "")  # Remove spaces
+    aadhaar_number = aadhaar_number.replace(" ", "")  
 
     if len(aadhaar_number) != 12 or not aadhaar_number.isdigit():
-        return False  # Aadhaar number must be 12 digits long
+        return False 
 
     c = 0
-    num_digits = list(map(int, aadhaar_number[::-1]))  # Reverse and convert to integers
+    num_digits = list(map(int, aadhaar_number[::-1]))  
     for i, digit in enumerate(num_digits):
         c = verhoeff_table_d[c][verhoeff_table_p[i % 8][digit]]
 
-    return c == 0  # If c == 0, it's a valid Aadhaar number
+    return c == 0  
 
 def extract_text(image_path):
     """Extract text from Aadhaar image using OCR."""
@@ -214,10 +89,10 @@ if __name__ == "__main__":
 
     print("\n🔄 Processing Aadhaar image...")
 
-    # Extract text from image
+
     extracted_text = extract_text(image_path)
 
-    # Extract Aadhaar details
+
     details = extract_details(extracted_text)
 
     print("\n✅ Aadhaar Verification Summary:")
@@ -226,7 +101,7 @@ if __name__ == "__main__":
     if details["aadhaar_number"]:
         print(f"📌 Aadhaar Number: {details['aadhaar_number']}")
 
-        # Validate Aadhaar using Verhoeff Algorithm
+
         if verhoeff_validate(details["aadhaar_number"]):
             print("✅ Aadhaar Number is **VALID** ✅")
         else:
@@ -244,7 +119,7 @@ if __name__ == "__main__":
     else:
         print("❌ Gender Not Found")
 
-    # Fake Aadhaar Check
+ 
     if "Unique Identification Authority of India" not in extracted_text:
         print("⚠ Possible Fake Aadhaar (Missing: Unique Identification Authority of India)")
     else:

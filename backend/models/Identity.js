@@ -12,7 +12,7 @@ const identitySchema = new mongoose.Schema({
   gender: { type: String, required: true },
 });
 
-// Ensure Aadhaar Number is always a string before saving
+
 identitySchema.pre("save", function (next) {
   this.aadhaarNumber = String(this.aadhaarNumber).replace(/\s/g, ""); 
   next();

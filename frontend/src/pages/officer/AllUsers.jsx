@@ -8,7 +8,7 @@ function AllUsers() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/users/all"); // Backend route
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/all`); // Backend route
         if (!response.ok) throw new Error("Failed to fetch users");
 
         const data = await response.json();

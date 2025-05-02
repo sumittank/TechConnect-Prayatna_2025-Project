@@ -8,7 +8,7 @@ function InspectionDetails() {
   useEffect(() => {
     const fetchInspections = async () => {
       try {
-        // Step 1: Get email from localStorage
+
         const email = localStorage.getItem("email");
         if (!email) {
           setError("User email not found. Please log in.");
@@ -16,15 +16,13 @@ function InspectionDetails() {
           return;
         }
 
-        // Step 2: Fetch inspection details from backend
-        const response = await fetch(`http://localhost:5000/api/inspection/user/inspections?email=${email}`);
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/inspection/user/inspections?email=${email}`);
         const data = await response.json();
 
         if (!response.ok) {
           throw new Error(data.message || "Failed to fetch inspections");
         }
 
-        // Step 3: Set fetched inspections to state
         setInspections(data.inspections);
       } catch (err) {
         setError(err.message);
@@ -37,19 +35,19 @@ function InspectionDetails() {
   }, []);
 
   const getStatusClass = (status) => {
-    switch (status.toLowerCase()) { // Ensure case insensitivity
+    switch (status.toLowerCase()) {
       case "completed":
-        return "bg-green-500 text-white px-3 py-1 rounded-md "; // Softer green
+        return "bg-green-500 text-white px-3 py-1 rounded-md ";
       case "rescheduled":
-        return "bg-yellow-500 text-black px-3 py-1 rounded-md"; // Bright yellow for warning
+        return "bg-yellow-500 text-black px-3 py-1 rounded-md";
       case "pending":
-        return "bg-blue-500 text-white px-3 py-1 rounded-md "; // Softer blue
+        return "bg-blue-500 text-white px-3 py-1 rounded-md "; 
       case "rejected":
-        return "bg-red-500 text-white px-3 py-1 rounded-md "; // Softer red
+        return "bg-red-500 text-white px-3 py-1 rounded-md "; 
       case "in progress":
-        return "bg-purple-500 text-white px-3 py-1 rounded-md "; // Purple for active status
+        return "bg-purple-500 text-white px-3 py-1 rounded-md ";
       default:
-        return "bg-gray-400 text-black px-3 py-1 rounded-md "; // Gray for unknown status
+        return "bg-gray-400 text-black px-3 py-1 rounded-md "; 
     }
   };
 

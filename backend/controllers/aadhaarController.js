@@ -9,8 +9,6 @@ const validateAadhaar = (req, res) => {
     const imagePath = path.resolve(req.file.path);
     console.log(`📂 File uploaded: ${imagePath}`);
 
-    // Call the Python script for Aadhaar validation
-    // const pythonProcess = spawn("python", ["./validate_aadhaar.py", imagePath]);
     const pythonProcess = spawn("python", [path.join(__dirname, "../../ml-api/validate_aadhaar.py"), req.file.path]);
 
 

@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ['applicant', 'officer', 'admin'], required: true },
-    uniqueKey: { type: String }, // Required for officers and admins
+    uniqueKey: { type: String }, 
     createdAt: { type: Date, default: Date.now }
 });
 
